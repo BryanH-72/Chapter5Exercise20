@@ -2,44 +2,81 @@
  Developer/Programmer: Bryan Hurley
  Date: April 2025
  Requirements:
-This program is a basic number guessing game.
+This program is a basic number guessing game with menu.
 */
 
 #include <iostream>
+#include <fstream>
+#include <string>
 #include <random>
 using namespace std;
 
-// Generate random number between 1 and 100
-int getSecret() {
+// Get menu selection
+int getMenuChoice() {
+    int choice = 0;
+    bool ran = false;
+    while (choice < 1 || choice > 4) {
+        if (ran == true) {
+            cout << "Please choose 1, 2, 3, or 4" << endl;
+        }
+        cout << "1. Display Sessions\n2. Play Game\n3. Delete Sessions\n4. Exit\nChoice: ";
+        cin >> choice;
+        ran = true;
+    }
+    return choice;
+}
+
+//  Run guessing game and save session
+void playGame() {
+    string name;
+    int guess = 0;
     random_device rd;
     default_random_engine eng(rd());
     uniform_int_distribution<int> dist(1, 100);
-    return dist(eng);
-}
+    int secret = dist(eng);
 
-// Get a valid guess using only cin
-int getGuess() {
-    int guess = 0;
-    while (guess < 1 || guess > 100) {
-        cout << "Enter a number (1–100): ";
+    cout << "Enter your name: ";
+    cin >> name;
+
+    while (guess != secret) {
+        cout << "Guess (1–100): ";
         cin >> guess;
+        if (guess < secret) cout << "Too low.\n";
+        else if (guess > secret) cout << "Too high.\n";
     }
-    return guess;
+
+    ofstream file("sessions.txt", ios::app);
+    file << name << " guessed correctly.\n";
+    file.close();
+    cout << "Correct!\n";
 }
 
-// Main module
-int main() {
-    int secret = getSecret();
-    int guess;
+// Display or delete sessions
+void showSessions() {
+    ifstream file("sessions.txt");
+    string line;
+    cout << "\n-- Session Log --\n";
+    while (getline(file, line)) {
+        cout << line << endl;
+    }
+    file.close();
+}
+void deleteSessions() {
+    ofstream file("sessions.txt", ios::trunc);
+    file.close();
+    cout << "Sessions cleared.\n";
+}
 
-    cout << "Guess the number I'm thinking of (1–100)...\n";
+int main() {
+    int choice;
 
     do {
-        guess = getGuess();
-        if (guess > secret) cout << "Too high!\n";
-        else if (guess < secret) cout << "Too low!\n";
-    } while (guess != secret);
+        choice = getMenuChoice();
+        if (choice == 1) showSessions();
+        else if (choice == 2) playGame();
+        else if (choice == 3) deleteSessions();
+        
+    } while (choice != 4);
 
-    cout << "Correct!\n";
     return 0;
 }

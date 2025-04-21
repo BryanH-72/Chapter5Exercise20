@@ -37,10 +37,17 @@ void playGame() {
 
     cout << "Enter your name: ";
     cin >> name;
+    bool ran = false;
 
     while (guess != secret) {
-        cout << "Guess (1 - 100): ";
-        cin >> guess;
+        while (guess < 1 || guess > 100) {
+            if (ran == true) {
+                cout << "Please enter a number between 1 and 100" << endl;
+            }
+            cout << "Enter a number (1 - 100): ";
+            cin >> guess;
+            ran = true;
+        }
         if (guess < secret) cout << "Too low.\n";
         else if (guess > secret) cout << "Too high.\n";
     }

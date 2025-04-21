@@ -39,7 +39,7 @@ void playGame() {
     cin >> name;
 
     while (guess != secret) {
-        cout << "Guess (1–100): ";
+        cout << "Guess (1 - 100): ";
         cin >> guess;
         if (guess < secret) cout << "Too low.\n";
         else if (guess > secret) cout << "Too high.\n";

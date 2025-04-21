@@ -20,9 +20,14 @@ int getSecret() {
 // Get a valid guess using only cin
 int getGuess() {
     int guess = 0;
+    bool ran = false;
     while (guess < 1 || guess > 100) {
-        cout << "Enter a number (1–100): ";
+        if (ran == true) {
+            cout << "Please enter a number between 1 and 100" << endl;
+        }
+        cout << "Enter a number (1 - 100): ";
         cin >> guess;
+        ran = true;
     }
     return guess;
 }
@@ -32,7 +37,7 @@ int main() {
     int secret = getSecret();
     int guess;
 
-    cout << "Guess the number I'm thinking of (1–100)...\n";
+    cout << "Guess the number I'm thinking of (1 - 100)...\n";
 
     do {
         guess = getGuess();
